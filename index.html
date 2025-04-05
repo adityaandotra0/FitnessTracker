@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: linear-gradient(to right top, #1e3c72, #2a5298, #4a6cb3, #6e88c1, #93a3d1);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen">
+    <div id="appContainer" class="container mx-auto p-6 max-w-6xl">
+        <div class="bg-white shadow-lg rounded-2xl p-6">
+            <h1 class="text-4xl font-bold text-center text-gray-800 mb-6">Fitness Tracker</h1>
+            
+            <!-- Dashboard Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                <div class="bg-gradient-to-r from-green-400 to-blue-500 p-6 rounded-lg shadow-md text-white text-center">
+                    <h2 class="text-xl font-semibold">Steps Taken</h2>
+                    <p id="steps" class="text-3xl font-bold">8,245</p>
+                </div>
+                <div class="bg-gradient-to-r from-red-400 to-yellow-500 p-6 rounded-lg shadow-md text-white text-center">
+                    <h2 class="text-xl font-semibold">Calories Burned</h2>
+                    <p id="calories" class="text-3xl font-bold">1,230</p>
+                </div>
+                <div class="bg-gradient-to-r from-indigo-400 to-pink-500 p-6 rounded-lg shadow-md text-white text-center">
+                    <h2 class="text-xl font-semibold">Water Intake</h2>
+                    <p id="water" class="text-3xl font-bold">2.1L</p>
+                </div>
+                <div class="bg-gradient-to-r from-blue-400 to-purple-500 p-6 rounded-lg shadow-md text-white text-center">
+                    <h2 class="text-xl font-semibold">Weather</h2>
+                    <p id="weather" class="text-lg">Loading...</p>
+                </div>
+            </div>
+
+            <!-- Weekly Activity Chart -->
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Weekly Progress</h2>
+                <canvas id="activityChart" height="120"></canvas>
+            </div>
+
+            <!-- Workout Log -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Workout Log</h2>
+                <ul class="list-disc pl-6 text-gray-700">
+                    <li>🏃‍♂️ Ran 5km - 300 Calories</li>
+                    <li>🏋️‍♀️ Weight Training - 45 mins - 400 Calories</li>
+                    <li>🧘‍♂️ Yoga - 30 mins - 130 Calories</li>
+                </ul>
+            </div>
+        </div>
+        <footer class="mt-6 text-center text-white text-sm">
+            Created by <a href="https://github.com/adityaandotra0" target="_blank" class="underline text-blue-300 hover:text-blue-500">Aditya Andotra</a>
+        </footer>
+    </div>
+
+    <script>
+        async function fetchWeather() {
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const locationData = await response.json();
+                const city = locationData.city;
+                const lat = locationData.latitude;
+                const lon = locationData.longitude;
+
+                const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+                const weatherData = await weatherResponse.json();
+
+                document.getElementById('weather').innerText = `${city}: ${weatherData.current_weather.temperature}°C`;
+            } catch (error) {
+                document.getElementById('weather').innerText = "Failed to load weather data";
+            }
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('activityChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Calories Burned',
+                        data: [300, 500, 400, 600, 450, 700, 650],
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        fetchWeather();
+        renderChart();
+    </script>
+</body>
+</html>
