@@ -12,12 +12,8 @@ A modern, responsive Fitness Tracker web application built with **HTML**, **Tail
 - 👨‍💻 Created by [Aditya Andotra](https://github.com/adityaandotra0)
 
 ## 📸 Demo
-
-![Screenshot 2025-04-05 234229](https://github.com/user-attachments/assets/fd028b48-9f7f-443f-8d2b-f74fafac617f)
-
-
 🔗 [Live Website](https://adityaandotra0.github.io/FitnessTracker/)  
-![Fitness Tracker Screenshot](screenshot.png)
+![Screenshot 2025-04-05 234229](https://github.com/user-attachments/assets/fd028b48-9f7f-443f-8d2b-f74fafac617f)
 
 ## 🚀 Tech Stack
 
